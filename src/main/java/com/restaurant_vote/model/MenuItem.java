@@ -1,5 +1,8 @@
 package com.restaurant_vote.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -22,7 +25,9 @@ public class MenuItem extends AbstractNamedEntity {
     @Range(min = 1)
     Integer price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @NotNull
     Restaurant restaurant;

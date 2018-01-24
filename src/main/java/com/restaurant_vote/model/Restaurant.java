@@ -1,5 +1,8 @@
 package com.restaurant_vote.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.restaurant_vote.util.MergeRestriction;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -18,13 +21,31 @@ public class Restaurant extends AbstractNamedEntity {
         this.menu = menu;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @MergeRestriction
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("name")
     private List<MenuItem> menu;
 
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "restaurant",cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @MergeRestriction
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "restaurant")
     private List<Vote> votes;
+
+    public List<MenuItem> getMenu() {
+        return menu;
+    }
+
+    public void setMenu(List<MenuItem> menu) {
+        this.menu = menu;
+    }
+
+    public List<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
+    }
 
     @Override
     public String toString() {
