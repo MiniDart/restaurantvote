@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional(readOnly = true)
 public interface MenuRepository extends JpaRepository<MenuItem,Integer>{
     @Transactional
     @Modifying
@@ -21,8 +22,8 @@ public interface MenuRepository extends JpaRepository<MenuItem,Integer>{
     @Transactional
     MenuItem save(MenuItem menuItem);
 
-    @Query("SELECT m FROM MenuItem m WHERE m.id=:id AND m.restaurant.id=:restaurantId")
-    Optional<MenuItem> findById(@Param("id") int id, @Param("restaurantId") int restaurantId);
+    @Override
+    Optional<MenuItem> findById(Integer id);
 
     @Transactional
     @Modifying
@@ -34,5 +35,6 @@ public interface MenuRepository extends JpaRepository<MenuItem,Integer>{
     List<MenuItem> findByRestaurant(@Param("id") int id);
 
     @Override
+    @Transactional
     void deleteAll();
 }

@@ -25,17 +25,16 @@ public interface RestaurantRepository  extends JpaRepository<Restaurant,Integer>
     Restaurant save(Restaurant restaurant);
 
     @Override
-    @EntityGraph(attributePaths = {"menu"}, type = EntityGraph.EntityGraphType.FETCH)
-    Optional<Restaurant> findById(Integer integer);
+    Optional<Restaurant> findById(Integer id);
 
     @Query("SELECT r FROM Restaurant r ORDER BY name")
     @EntityGraph(attributePaths = {"menu"}, type = EntityGraph.EntityGraphType.FETCH)
     List<Restaurant> getAllWithMenu();
 
     @Query(value = "SELECT restaurants.id,restaurants.name, COUNT(votes.id) " +
-            "FROM restaurants INNER JOIN votes " +
+            "FROM restaurants LEFT JOIN votes " +
             "ON restaurants.id = votes.restaurant_id " +
-            "GROUP BY restaurants.id",nativeQuery = true)
+            "GROUP BY restaurants.id ORDER BY restaurants.name",nativeQuery = true)
     List<Object[]> getAllWithVotesCount();
 
     @Override

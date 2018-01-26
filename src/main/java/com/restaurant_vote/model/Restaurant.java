@@ -2,6 +2,8 @@ package com.restaurant_vote.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.restaurant_vote.util.MergeRestriction;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.List;
@@ -28,7 +30,8 @@ public class Restaurant extends AbstractNamedEntity {
 
 
     @MergeRestriction
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant")
+    @LazyCollection(LazyCollectionOption.EXTRA)
     private List<Vote> votes;
 
     public List<MenuItem> getMenu() {

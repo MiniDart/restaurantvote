@@ -1,6 +1,6 @@
 package com.restaurant_vote.repository;
 
-import com.restaurant_vote.model.User;
+import com.restaurant_vote.model.Vote;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,21 +12,24 @@ import java.util.List;
 import java.util.Optional;
 
 @Transactional(readOnly = true)
-public interface UserRepository extends JpaRepository<User,Integer>{
+public interface VoteRepository extends JpaRepository<Vote,Integer>{
+
+    @Override
+    Optional<Vote> findById(Integer id);
+
+    @Override
+    List<Vote> findAll(Sort sort);
+
     @Transactional
     @Modifying
-    @Query("DELETE FROM User u WHERE u.id=:id")
-    int delete(@Param("id") int id);
+    @Query("DELETE FROM Vote v WHERE v.id=:id AND v.user.id=:userId")
+    int delete(@Param("id") int id, @Param("userId") int userId);
 
     @Override
     @Transactional
-    User save(User user);
+    void deleteAll();
 
     @Override
-    Optional<User> findById(Integer id);
-
-    @Override
-    List<User> findAll(Sort sort);
-
-    User getByEmail(String email);
+    @Transactional
+    Vote save(Vote entity);
 }

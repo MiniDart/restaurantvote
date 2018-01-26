@@ -40,7 +40,6 @@ public class User extends AbstractNamedEntity {
     private LocalDateTime registered;
 
     @MergeRestriction(roles = {"ROLE_ADMIN"})
-    @JsonIgnore
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
@@ -49,7 +48,6 @@ public class User extends AbstractNamedEntity {
     private Set<Role> roles;
 
     @MergeRestriction
-    @JsonIgnore
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Vote vote;
 

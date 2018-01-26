@@ -22,7 +22,7 @@
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
           p:dataSource-ref="dataSource"
-          p:packagesToScan="com.restaurant_vote.*">
+          p:packagesToScan="com.restaurant_vote.model">
         <!--p:persistenceUnitName="persistenceUnit">-->
 
         <property name="jpaPropertyMap">
@@ -53,7 +53,7 @@
     <!-- Transaction manager for a single JPA EntityManagerFactory (alternative to JTA) -->
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
           p:entityManagerFactory-ref="entityManagerFactory"/>
-    <context:component-scan base-package="com.restaurant_vote.repository"/>
-    <jpa:repositories base-package="com.restaurant_vote.repository"/>
+    <context:component-scan base-package="com.restaurant_vote"/>
+    <jpa:repositories base-package="com.restaurant_vote"/>
 
 </beans>

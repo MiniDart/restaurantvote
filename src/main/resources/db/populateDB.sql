@@ -35,7 +35,7 @@ INSERT INTO menu_items (restaurant_id,name,price) VALUES
   (100005,'Scrambled eggs',12000);
 
 INSERT INTO votes (user_id, restaurant_id) VALUES
-  (100000,100003),
+  (100000,100005),
   (100001,100004),
-  (100002,100003);
+  (100002,100005);
 
