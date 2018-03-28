@@ -5,6 +5,7 @@ import com.restaurant_vote.util.MergeRestriction;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.util.CollectionUtils;
 
+import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -48,12 +49,14 @@ public class User extends AbstractNamedEntity {
     private Set<Role> roles;
 
     @MergeRestriction
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user")
+    @JsonIgnore
     private Vote vote;
 
 
     public User() {
     }
+
 
     public User(User u) {
         this(u.getId(), u.getName(), u.getPassword(), u.getEmail(),u.isEnabled(), u.getRegistered(), u.getRoles());

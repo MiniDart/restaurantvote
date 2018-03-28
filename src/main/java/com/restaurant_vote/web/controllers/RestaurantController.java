@@ -1,12 +1,16 @@
 package com.restaurant_vote.web.controllers;
 
 import com.restaurant_vote.model.Restaurant;
+import com.restaurant_vote.service.HistoryMenuService;
 import com.restaurant_vote.service.RestaurantService;
+import com.restaurant_vote.to.HistoryMenuItemTo;
 import com.restaurant_vote.to.RestaurantWithMenuTo;
 import com.restaurant_vote.to.RestaurantWithVotesCountTo;
+import com.restaurant_vote.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -24,6 +29,10 @@ public class RestaurantController {
 
     @Autowired
     private RestaurantService service;
+
+
+    @Autowired
+    private HistoryMenuService historyMenuItemService;
 
 
     @GetMapping("/{id}")
@@ -50,6 +59,20 @@ public class RestaurantController {
         return service.getAll();
     }
 
+    @GetMapping("/history")
+    public List<HistoryMenuItemTo> getHistory(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(required = false) LocalDate end){
+        TimeUtil.Period period=TimeUtil.createPeriod(start,end);
+        return historyMenuItemService.getBetween(period.getStart(),period.getEnd());
+    }
+
+    @GetMapping("/{id}/history")
+    public List<HistoryMenuItemTo> getHistoryByRestaurant(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam(required = false) LocalDate end,
+                                                        @PathVariable("id") int id){
+        TimeUtil.Period period=TimeUtil.createPeriod(start,end);
+        return historyMenuItemService.getBetweenByRestaurant(id,period.getStart(),period.getEnd());
+    }
+
 
     //Admin
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -73,5 +96,6 @@ public class RestaurantController {
     public void update(@RequestBody Restaurant restaurant, @PathVariable("id") int id){
         service.update(restaurant, id);
     }
+
 
 }

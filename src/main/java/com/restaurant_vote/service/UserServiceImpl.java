@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 
 import static com.restaurant_vote.util.MergeUtil.merge;
@@ -18,13 +18,14 @@ import static com.restaurant_vote.util.ValidationUtil.*;
 
 @Service
 public class UserServiceImpl implements UserService{
-    private static final String ERROR_MESSAGE_NOT_NULL="Error. There is no user.";
+    static final Logger log=Logger.getLogger(UserServiceImpl.class.getName());
 
     @Autowired
     private UserRepository repository;
 
     @Override
     public User create(User user) {
+        checkNotNull(user,"User");
         checkNew(user);
         return repository.save(user);
     }
@@ -47,7 +48,7 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void update(User newUser, int id) {
-        Assert.notNull(newUser,ERROR_MESSAGE_NOT_NULL);
+        checkNotNull(newUser,"User");
         User oldUser=get(id);
         checkId(newUser,id);
         repository.save(merge(newUser,oldUser));
@@ -55,7 +56,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> getAll() {
-        return repository.findAll(new Sort(Sort.Direction.ASC, "name", "email"));
+        List<User> users=repository.findAll(new Sort(Sort.Direction.ASC, "name", "email"));
+        return users;
     }
 
     @Override

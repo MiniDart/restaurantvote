@@ -16,17 +16,35 @@ public class HistoryMenuItem extends AbstractNamedEntity {
     @NotNull
     @Range(min = 1)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    Integer price;
+    private Integer price;
+
+    @Column(name = "menu_item_id", nullable = false)
+    @NotNull
+    private Integer menuItemId;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
     @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
-    Restaurant restaurant;
+    private Restaurant restaurant;
 
     @Column(name = "date", nullable = false)
     @NotNull
     private LocalDate date;
+
+    public HistoryMenuItem(){}
+
+    public HistoryMenuItem(Integer id, String name, @NotNull Integer menuItemId,@NotNull @Range(min = 1) Integer price, @NotNull Restaurant restaurant, @NotNull LocalDate date) {
+        super(id, name);
+        this.price = price;
+        this.restaurant = restaurant;
+        this.date = date;
+        this.menuItemId=menuItemId;
+    }
+
+    public HistoryMenuItem(MenuItem menuItem){
+        this(null,menuItem.getName(), menuItem.getId(),menuItem.getPrice(),menuItem.getRestaurant(),LocalDate.now());
+    }
 
     public Integer getPrice() {
         return price;
@@ -50,6 +68,14 @@ public class HistoryMenuItem extends AbstractNamedEntity {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public Integer getMenuItemId() {
+        return menuItemId;
+    }
+
+    public void setMenuItemId(Integer menuItemId) {
+        this.menuItemId = menuItemId;
     }
 
     @Override

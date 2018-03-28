@@ -1,6 +1,5 @@
 package com.restaurant_vote.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.restaurant_vote.util.MergeRestriction;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -13,6 +12,7 @@ import java.util.List;
 public class Restaurant extends AbstractNamedEntity {
     public Restaurant() {
     }
+
 
     public Restaurant(Integer id, String name) {
         super(id, name);

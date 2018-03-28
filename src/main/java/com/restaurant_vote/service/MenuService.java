@@ -11,4 +11,5 @@ public interface MenuService {
     void deleteByRestaurant(int restaurantId);
     void update(MenuItemTo menuItemTo,int id, int restaurantId);
     void delete(int id, int restaurantId);
+    void copyMenu();
 }

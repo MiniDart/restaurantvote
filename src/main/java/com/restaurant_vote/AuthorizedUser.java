@@ -12,7 +12,7 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
     private static final long serialVersionUID = 1L;
     private static AuthorizedUser authorizedUser;
     static {
-        authorizedUser=new AuthorizedUser(new User(100002,"User2","admin","admin@mail.com", Role.ROLE_USER,Role.ROLE_ADMIN));
+        authorizedUser=new AuthorizedUser(new User(100001,"Admin","admin","admin@mail.com", Role.ROLE_USER,Role.ROLE_ADMIN));
     }
 
     private final UserTo userTo;

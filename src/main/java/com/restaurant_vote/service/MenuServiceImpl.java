@@ -1,14 +1,16 @@
 package com.restaurant_vote.service;
 
+import com.restaurant_vote.model.HistoryMenuItem;
 import com.restaurant_vote.model.MenuItem;
+import com.restaurant_vote.repository.BatchSaveRepository;
 import com.restaurant_vote.repository.MenuRepository;
 import com.restaurant_vote.repository.RestaurantRepository;
 import com.restaurant_vote.to.MenuItemTo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -21,7 +23,6 @@ import static com.restaurant_vote.util.MergeUtil.merge;
 @Service
 public class MenuServiceImpl implements MenuService{
 
-    private final String ERROR_MESSAGE_NOT_NULL ="Error. There is no menu item.";
     private final class RestaurantChecker implements Predicate<MenuItem>{
         int restaurantId;
 
@@ -41,6 +42,9 @@ public class MenuServiceImpl implements MenuService{
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private BatchSaveRepository saveRepository;
+
 
     @Override
     public MenuItemTo get(int id, int restaurantId) {
@@ -56,10 +60,15 @@ public class MenuServiceImpl implements MenuService{
     @Override
     @Transactional
     public MenuItemTo create(MenuItemTo menuItemTo, int restaurantId) {
-        Assert.notNull(menuItemTo, ERROR_MESSAGE_NOT_NULL);
-        MenuItem newMenuItem=menuItemToIntoMenuItem(menuItemTo);
-        newMenuItem.setRestaurant(restaurantRepository.getOne(restaurantId));
-        checkNew(newMenuItem);
+        checkNotNull(menuItemTo,"Menu");
+        checkNew(menuItemTo);
+        MenuItem newMenuItem= menuItemTOIntoMenuItem(menuItemTo);
+        try {
+            newMenuItem.setRestaurant(restaurantRepository.getOne(restaurantId));
+        }
+        catch (EntityNotFoundException e){
+            throwIllegalArgumentException("restaurant",restaurantId);
+        }
         return new MenuItemTo(repository.save(newMenuItem));
     }
 
@@ -72,15 +81,23 @@ public class MenuServiceImpl implements MenuService{
     @Override
     @Transactional
     public void update(MenuItemTo menuItemTo, int id, int restaurantId) {
-        Assert.notNull(menuItemTo, ERROR_MESSAGE_NOT_NULL);
+        checkNotNull(menuItemTo,"Menu");
+        checkNotNew(menuItemTo);
         MenuItem oldMenuItem=check(repository.findById(id).filter(new RestaurantChecker(restaurantId)),id);
-        MenuItem newMenuItem=menuItemToIntoMenuItem(menuItemTo);
+        MenuItem newMenuItem= menuItemTOIntoMenuItem(menuItemTo);
         checkId(newMenuItem,id);
         repository.save(merge(newMenuItem,oldMenuItem));
     }
 
     @Override
     public void delete(int id, int restaurantId) {
+
         check(repository.delete(id,restaurantId),id);
+    }
+
+    @Override
+    public void copyMenu() {
+        List<HistoryMenuItem> items=repository.findAll().stream().map(HistoryMenuItem::new).collect(Collectors.toList());
+        saveRepository.saveAll(items);
     }
 }

@@ -15,7 +15,7 @@ public class MenuUtil {
         return new Double(sum*CONVERT_COEFFICIENT).intValue();
     }
 
-    public static MenuItem menuItemToIntoMenuItem(MenuItemTo menuItemTo){
+    public static MenuItem menuItemTOIntoMenuItem(MenuItemTo menuItemTo){
         MenuItem menuItem=new MenuItem();
         if (menuItemTo.getId()!=null) menuItem.setId(menuItemTo.getId());
         menuItem.setName(menuItemTo.getName());

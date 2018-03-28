@@ -24,10 +24,10 @@ public class Vote extends AbstractBaseEntity {
     @NotNull
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @NotNull
+    @OneToOne
     private Restaurant restaurant;
 
     public User getUser() {

@@ -2,27 +2,31 @@ package com.restaurant_vote.to;
 
 import com.restaurant_vote.model.Vote;
 
-public class VoteTo {
-    Integer id;
-    Integer restaurantId;
+public class VoteTo extends BaseTo {
+    private Integer userId;
+    private Integer restaurantId;
 
-    public VoteTo(Integer id, Integer restaurantId) {
-        this.id = id;
-        this.restaurantId = restaurantId;
+    public VoteTo(Vote vote) {
+        super(vote.getId());
+        userId=vote.getUser()==null?null:vote.getUser().getId();
+        restaurantId=vote.getRestaurant()==null?null:vote.getRestaurant().getId();
     }
-    public VoteTo(Vote vote){
-        this(vote.getId(),vote.getRestaurant().getId());
+
+    public VoteTo(Integer id, Integer userId, Integer restaurantId) {
+        super(id);
+        this.userId = userId;
+        this.restaurantId = restaurantId;
     }
 
     public VoteTo() {
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Integer getRestaurantId() {

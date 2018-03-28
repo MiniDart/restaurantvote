@@ -1,13 +1,12 @@
 package com.restaurant_vote.service;
 
-import com.restaurant_vote.model.Vote;
 import com.restaurant_vote.to.VoteTo;
 
+import java.util.List;
+
 public interface VoteService {
-    Vote get(int id,int userId);
-    Vote get(int id);
+    VoteTo get(int userId);
     void deleteAll();
-    void delete(int id,int userId);
-    VoteTo create(VoteTo voteTo, int userId);
-    void update(Vote vote, int userId);
+    List<VoteTo> getAll();
+    VoteTo save(VoteTo vote, int userId);
 }

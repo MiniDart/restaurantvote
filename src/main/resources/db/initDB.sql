@@ -58,7 +58,7 @@ CREATE UNIQUE INDEX votes_user_id_idx ON votes (user_id);
 
 CREATE TABLE votes_history
 (
-  id            INTEGER PRIMARY KEY,
+  id            INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
   user_id       INTEGER   NOT NULL,
   restaurant_id INTEGER   NOT NULL,
   date    DATE NOT NULL,
@@ -70,7 +70,8 @@ CREATE UNIQUE INDEX votes_history_user_id_date_idx ON votes_history (user_id, da
 
 CREATE TABLE menu_items_history
 (
-  id            INTEGER PRIMARY KEY,
+  id            INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
+  menu_item_id  INTEGER      NOT NULL,
   restaurant_id INTEGER      NOT NULL,
   name          VARCHAR(255) NOT NULL,
   price         INTEGER      NOT NULL,

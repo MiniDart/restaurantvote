@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -20,7 +19,6 @@ import static com.restaurant_vote.util.ValidationUtil.*;
 @Service
 public class RestaurantServiceImpl implements RestaurantService{
 
-    private final String ERROR_MESSAGE_NOT_NULL="Error. There is no restaurant.";
 
     @Autowired
     private RestaurantRepository repository;
@@ -55,7 +53,7 @@ public class RestaurantServiceImpl implements RestaurantService{
 
     @Override
     public Restaurant create(Restaurant newRestaurant) {
-        Assert.notNull(newRestaurant, ERROR_MESSAGE_NOT_NULL);
+        checkNotNull(newRestaurant,"Restaurant");
         checkNew(newRestaurant);
         return repository.save(newRestaurant);
     }
@@ -63,7 +61,8 @@ public class RestaurantServiceImpl implements RestaurantService{
     @Override
     @Transactional
     public void update(Restaurant restaurant, int id) {
-        Assert.notNull(restaurant,ERROR_MESSAGE_NOT_NULL);
+        checkNotNull(restaurant,"Restaurant");
+        checkNotNew(restaurant);
         Restaurant oldRestaurant=get(id);
         checkId(restaurant,id);
         repository.save(merge(restaurant,oldRestaurant));

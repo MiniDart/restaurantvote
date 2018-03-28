@@ -15,6 +15,11 @@ public class MenuItemTo extends BaseNamedTo{
         this.price = MenuUtil.convertToMoney(menuItem.getPrice());
     }
 
+    public MenuItemTo(Integer id, String name, Double price) {
+        super(id, name);
+        this.price = price;
+    }
+
     public Double getPrice() {
         return price;
     }
