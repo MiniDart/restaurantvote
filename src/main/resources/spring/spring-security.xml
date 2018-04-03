@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <http use-expressions="true" name="restSecurityFilterChain" create-session="stateless" entry-point-ref="entryPoint">
+        <http-basic/>
+        <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
+        <form-login authentication-failure-handler-ref="failureHandler" />
+        <csrf disabled="true"/>
+    </http>
+
+    <!--http://www.baeldung.com/securing-a-restful-web-service-with-spring-security-->
+    <beans:bean id="failureHandler" class=
+            "org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"/>
+
+    <beans:bean name="noopEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>
+
+    <authentication-manager>
+        <authentication-provider user-service-ref="userService">
+            <password-encoder ref="noopEncoder"/>
+        </authentication-provider>
+    </authentication-manager>
+</beans:beans>
