@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -31,8 +32,10 @@ public class MenuController {
         return service.getAllByRestaurant(restaurantId);
     }
 
+
     //Admin
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<MenuItemTo> createWithLocation(@RequestBody MenuItemTo menuItemTo,
                                                        @PathVariable("restaurantId") int restaurantId) {
@@ -45,18 +48,21 @@ public class MenuController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") int id, @PathVariable("restaurantId") int restaurantId){
         service.delete(id,restaurantId);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteByRestaurant(@PathVariable("restaurantId") int restaurantId){
         service.deleteByRestaurant(restaurantId);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void update(@RequestBody MenuItemTo menuItemTo, @PathVariable("id") int id,
                        @PathVariable("restaurantId") int restaurantId){

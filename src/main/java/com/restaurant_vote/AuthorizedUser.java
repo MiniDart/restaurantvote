@@ -10,10 +10,6 @@ import static java.util.Objects.requireNonNull;
 
 public class AuthorizedUser extends org.springframework.security.core.userdetails.User {
     private static final long serialVersionUID = 1L;
-    private static AuthorizedUser authorizedUser;
-    static {
-        authorizedUser=new AuthorizedUser(new User(100001,"Admin","admin","admin@mail.com", Role.ROLE_USER,Role.ROLE_ADMIN));
-    }
 
     private final UserTo userTo;
 
@@ -23,7 +19,12 @@ public class AuthorizedUser extends org.springframework.security.core.userdetail
     }
 
     public static AuthorizedUser safeGet() {
-       return authorizedUser;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null) {
+            return null;
+        }
+        Object principal = auth.getPrincipal();
+        return (principal instanceof AuthorizedUser) ? (AuthorizedUser) principal : null;
     }
 
     public static AuthorizedUser get() {

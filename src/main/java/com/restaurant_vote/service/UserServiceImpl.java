@@ -1,10 +1,14 @@
 package com.restaurant_vote.service;
 
+import com.restaurant_vote.AuthorizedUser;
 import com.restaurant_vote.model.User;
 import com.restaurant_vote.repository.UserRepository;
 import com.restaurant_vote.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,8 +20,8 @@ import static com.restaurant_vote.util.MergeUtil.merge;
 
 import static com.restaurant_vote.util.ValidationUtil.*;
 
-@Service
-public class UserServiceImpl implements UserService{
+@Service("userService")
+public class UserServiceImpl implements UserService, UserDetailsService{
     static final Logger log=Logger.getLogger(UserServiceImpl.class.getName());
 
     @Autowired
@@ -66,5 +70,14 @@ public class UserServiceImpl implements UserService{
         User user = get(id);
         user.setEnabled(enable);
         repository.save(user);
+    }
+
+    @Override
+    public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = repository.getByEmail(email.toLowerCase());
+        if (user == null) {
+            throw new UsernameNotFoundException("User " + email + " is not found");
+        }
+        return new AuthorizedUser(user);
     }
 }
