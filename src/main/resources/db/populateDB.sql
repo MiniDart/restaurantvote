@@ -31,7 +31,7 @@ INSERT INTO menu_items (restaurant_id,name,price) VALUES
   (100004,'Potato',13000),
   (100004,'Boiled eggs',15000),
   (100005,'Beef stew',40000),
-  (100005,'Baked turkey',8000),
+  (100005,'Baked turkey',80000),
   (100005,'Scrambled eggs',12000);
 
 INSERT INTO votes (user_id, restaurant_id) VALUES
@@ -47,6 +47,11 @@ INSERT INTO menu_items_history (menu_item_id,restaurant_id,name, price, date) VA
   (100010,100004,'Potato',13000,'2016-03-08'),
   (100011,100004,'Boiled eggs',15000,'2016-03-09'),
   (100012,100005,'Beef stew',40000,'2016-03-07'),
-  (100013,100005,'Baked turkey',8000,'2016-03-08'),
+  (100013,100005,'Baked turkey',80000,'2016-03-08'),
   (100014,100005,'Scrambled eggs',12000,'2016-03-09');
 
+INSERT INTO votes_history (user_id, restaurant_id, date) VALUES
+  (100000,100003,'2016-03-07'),
+  (100001,100003,'2016-03-07'),
+  (100000,100004,'2016-03-08'),
+  (100001,100004,'2016-03-08');

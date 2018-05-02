@@ -3,8 +3,8 @@ package com.restaurant_vote.to;
 import com.restaurant_vote.model.Vote;
 
 public class VoteTo extends BaseTo {
-    private Integer userId;
-    private Integer restaurantId;
+    protected Integer userId;
+    protected Integer restaurantId;
 
     public VoteTo(Vote vote) {
         super(vote.getId());

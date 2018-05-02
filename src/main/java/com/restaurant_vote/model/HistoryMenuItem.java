@@ -1,5 +1,6 @@
 package com.restaurant_vote.model;
 
+import com.restaurant_vote.to.MenuItemTo;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Range;

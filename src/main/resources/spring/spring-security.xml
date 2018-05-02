@@ -5,17 +5,15 @@
              xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
+    <!--http://www.baeldung.com/securing-a-restful-web-service-with-spring-security-->
+    <!--https://stackoverflow.com/questions/21451245/basic-authentication-filter-and-authentication-entry-point-not-actually-used-fro-->
     <http use-expressions="true" name="restSecurityFilterChain" create-session="stateless" entry-point-ref="entryPoint">
-        <http-basic/>
+        <http-basic entry-point-ref="entryPoint"/>
         <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
         <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
-        <form-login authentication-failure-handler-ref="failureHandler" />
+        <access-denied-handler ref="accessDeniedHandler" />
         <csrf disabled="true"/>
     </http>
-
-    <!--http://www.baeldung.com/securing-a-restful-web-service-with-spring-security-->
-    <beans:bean id="failureHandler" class=
-            "org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler"/>
 
     <beans:bean name="noopEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>
 

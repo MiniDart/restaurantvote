@@ -28,7 +28,6 @@ public class User extends AbstractNamedEntity {
     @Column(name = "password", nullable = false)
     @NotBlank
     @Size(min = 5, max = 64)
-    @JsonIgnore
     private String password;
 
     @MergeRestriction(roles = {"ROLE_ADMIN"})

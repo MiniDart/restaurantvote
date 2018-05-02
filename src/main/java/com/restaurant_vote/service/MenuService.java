@@ -23,4 +23,6 @@ public interface MenuService {
 
 
     void copyMenu();
+
+    List<MenuItemTo> getAll();
 }

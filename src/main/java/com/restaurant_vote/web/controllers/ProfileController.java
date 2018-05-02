@@ -16,12 +16,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 
 @RestController
-@RequestMapping(value = ProfileController.URL, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = ProfileController.URL, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class ProfileController {
 
     @Autowired
@@ -41,7 +42,7 @@ public class ProfileController {
         return new UserTo(service.get(AuthorizedUser.id()));
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public UserTo create(@RequestBody UserTo userTo){
         return new UserTo(service.create(UserUtil.convert(userTo)));
     }
@@ -52,7 +53,7 @@ public class ProfileController {
         service.delete(AuthorizedUser.id());
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void update(@RequestBody User user) {
         service.update(user, AuthorizedUser.id());
     }
@@ -79,6 +80,9 @@ public class ProfileController {
         return historyVoteService.getByUserAndDate(AuthorizedUser.id(),period.getStart(),period.getEnd());
     }
 
-
+    @GetMapping("/exception")
+    public void testException()throws Exception{
+        throw new NumberFormatException();
+    }
 
 }

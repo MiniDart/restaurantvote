@@ -12,4 +12,6 @@ public interface HistoryMenuService {
     List<HistoryMenuItemTo> getBetween(LocalDate start, LocalDate end);
 
     List<HistoryMenuItemTo> getBetweenByRestaurant(int id, LocalDate start, LocalDate end);
+
+    List<HistoryMenuItemTo> getAll();
 }

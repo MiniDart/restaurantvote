@@ -38,7 +38,7 @@ public class VoteServiceImpl implements VoteService{
 
 
     @Override
-    public void deleteAll() {
+    public void moveAll() {
         List<HistoryVote> historyVotes=repository.getAll().stream().map(HistoryVote::new).collect(Collectors.toList());
         saveRepository.saveAll(historyVotes);
         repository.deleteAll();

@@ -1,9 +1,11 @@
 package com.restaurant_vote.service;
 
+import com.restaurant_vote.model.HistoryVote;
 import com.restaurant_vote.repository.HistoryVoteRepository;
 import com.restaurant_vote.repository.UserRepository;
 import com.restaurant_vote.to.HistoryVoteTo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,5 +38,12 @@ public class HistoryVoteServiceImpl implements HistoryVoteService {
     @Override
     public HistoryVoteTo get(int id) {
         return new HistoryVoteTo(check(repository.findById(id),id));
+    }
+
+    @Override
+    public List<HistoryVoteTo> getAll() {
+        return repository.findAll().stream()
+                .map(HistoryVoteTo::new)
+                .collect(Collectors.toList());
     }
 }

@@ -1,7 +1,9 @@
 package com.restaurant_vote.to;
 
+import org.hibernate.Hibernate;
+
 public class BaseTo {
-private Integer id;
+protected Integer id;
 
     public BaseTo(Integer id) {
         this.id = id;
@@ -20,5 +22,22 @@ private Integer id;
 
     public boolean isNew(){
         return id==null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id == null ? 0 : id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || !getClass().equals(Hibernate.getClass(o))) {
+            return false;
+        }
+        BaseTo that = (BaseTo) o;
+        return id != null && id.equals(that.id);
     }
 }

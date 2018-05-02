@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface VoteService {
     VoteTo get(int userId);
-    void deleteAll();
+    void moveAll();
     List<VoteTo> getAll();
     VoteTo save(VoteTo vote, int userId);
 }

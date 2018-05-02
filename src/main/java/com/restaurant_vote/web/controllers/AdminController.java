@@ -5,6 +5,8 @@ import com.restaurant_vote.service.*;
 import com.restaurant_vote.to.HistoryVoteTo;
 import com.restaurant_vote.to.VoteTo;
 import com.restaurant_vote.util.TimeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -15,11 +17,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/admin", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/admin", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class AdminController {
+
+    private static final Logger log= LoggerFactory.getLogger(AdminController.class.getName());
     
     @Autowired
     private UserService userService;
@@ -45,8 +50,10 @@ public class AdminController {
         return userService.get(id);
     }
 
-    @PostMapping(value = "/users",consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/users",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<User> createWithLocation(@RequestBody User user) {
+        user.setRegistered(LocalDateTime.now());
+
         User created = userService.create(user);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -64,7 +71,7 @@ public class AdminController {
     }
 
     
-    @PutMapping(value = "/users/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/users/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void updateUser(@RequestBody User user, @PathVariable("id") int id) {
         userService.update(user, id);
     }
@@ -75,17 +82,12 @@ public class AdminController {
         return userService.getByEmail(email);
     }
 
-    
-    @PutMapping("/users/{id}")
-    public void enableUser(@PathVariable("id") int id, @RequestParam("enabled") boolean enabled) {
-        userService.enable(id, enabled);
-    }
 
     @PostMapping("/clear")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void clear(){
         menuService.copyMenu();
-        voteService.deleteAll();
+        voteService.moveAll();
     }
 
     @GetMapping("/votes")

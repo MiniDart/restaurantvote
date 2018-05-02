@@ -65,14 +65,6 @@ public class UserServiceImpl implements UserService, UserDetailsService{
     }
 
     @Override
-    @Transactional
-    public void enable(int id, boolean enable) {
-        User user = get(id);
-        user.setEnabled(enable);
-        repository.save(user);
-    }
-
-    @Override
     public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = repository.getByEmail(email.toLowerCase());
         if (user == null) {

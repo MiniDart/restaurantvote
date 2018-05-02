@@ -1,5 +1,6 @@
 package com.restaurant_vote.service;
 
+import com.restaurant_vote.model.HistoryMenuItem;
 import com.restaurant_vote.model.Restaurant;
 import com.restaurant_vote.repository.HistoryMenuRepository;
 import com.restaurant_vote.repository.RestaurantRepository;
@@ -38,5 +39,12 @@ public class HistoryMenuServiceImpl implements HistoryMenuService {
         Restaurant restaurant=restaurantRepository.getOne(id);
         return repository.findByRestaurantAndDateBetweenOrderByDateAsc(restaurant,start,end)
                 .stream().map(HistoryMenuItemTo::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<HistoryMenuItemTo> getAll() {
+        return repository.findAll().stream()
+                .map(HistoryMenuItemTo::new)
+                .collect(Collectors.toList());
     }
 }

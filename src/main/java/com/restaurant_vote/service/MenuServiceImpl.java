@@ -100,4 +100,11 @@ public class MenuServiceImpl implements MenuService{
         List<HistoryMenuItem> items=repository.findAll().stream().map(HistoryMenuItem::new).collect(Collectors.toList());
         saveRepository.saveAll(items);
     }
+
+    @Override
+    public List<MenuItemTo> getAll() {
+        return repository.findAll().stream()
+                .map(MenuItemTo::new)
+                .collect(Collectors.toList());
+    }
 }

@@ -4,7 +4,7 @@ import com.restaurant_vote.util.MenuUtil;
 import com.restaurant_vote.model.MenuItem;
 
 public class MenuItemTo extends BaseNamedTo{
-    private Double price;
+    protected Double price;
 
     public MenuItemTo() {
     }
