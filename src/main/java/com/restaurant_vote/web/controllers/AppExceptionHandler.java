@@ -2,6 +2,7 @@ package com.restaurant_vote.web.controllers;
 
 import com.restaurant_vote.model.ExceptionInfo;
 import com.restaurant_vote.util.exception.NotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -22,6 +23,12 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ExceptionInfo> handleDataBaseException(RuntimeException ex, HttpServletRequest request){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionInfo(request.getRequestURL().toString(),
+                ex.getMessage()));
+    }
+
     @ExceptionHandler(value = {NotFoundException.class,IllegalArgumentException.class})
     public ResponseEntity<ExceptionInfo> handleAppExceptions(RuntimeException ex, HttpServletRequest request){
         ExceptionInfo exceptionInfo=new ExceptionInfo();
@@ -40,10 +47,8 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({BadCredentialsException.class,AccessDeniedException.class})
     public ResponseEntity<ExceptionInfo> handleSecurityExceptions(RuntimeException ex, HttpServletRequest request){
-        ExceptionInfo exceptionInfo=new ExceptionInfo();
-        exceptionInfo.setUrl(request.getRequestURL().toString());
-        exceptionInfo.setMessage(ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exceptionInfo);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionInfo(request.getRequestURL().toString(),
+                ex.getMessage()));
     }
 
 }

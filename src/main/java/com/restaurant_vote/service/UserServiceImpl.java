@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 
     @Override
     public User getByEmail(String email) throws NotFoundException {
-        return repository.getByEmail(email);
+        return check(repository.getByEmail(email),"There is no user with email - "+email);
     }
 
     @Override
@@ -66,10 +66,8 @@ public class UserServiceImpl implements UserService, UserDetailsService{
 
     @Override
     public AuthorizedUser loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = repository.getByEmail(email.toLowerCase());
-        if (user == null) {
-            throw new UsernameNotFoundException("User " + email + " is not found");
-        }
+        User user = repository.getByEmail(email.toLowerCase()).orElseThrow(()->new UsernameNotFoundException("User " +
+                email + " is not found"));
         return new AuthorizedUser(user);
     }
 }

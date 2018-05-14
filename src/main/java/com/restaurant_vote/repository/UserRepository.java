@@ -28,5 +28,5 @@ public interface UserRepository extends JpaRepository<User,Integer>{
     @Override
     List<User> findAll(Sort sort);
 
-    User getByEmail(String email);
+    Optional<User> getByEmail(String email);
 }

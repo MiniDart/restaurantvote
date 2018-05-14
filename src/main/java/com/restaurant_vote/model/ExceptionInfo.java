@@ -4,6 +4,14 @@ public class ExceptionInfo {
     private String url;
     private String message;
 
+    public ExceptionInfo() {
+    }
+
+    public ExceptionInfo(String url, String message) {
+        this.url = url;
+        this.message = message;
+    }
+
     public String getUrl() {
         return url;
     }

@@ -1,16 +1,14 @@
 package com.restaurant_vote.web.controllers;
 
 import com.restaurant_vote.TestUtil;
-import com.restaurant_vote.model.HistoryMenuItem;
-import com.restaurant_vote.model.HistoryVote;
-import com.restaurant_vote.model.Role;
-import com.restaurant_vote.model.User;
+import com.restaurant_vote.model.*;
 import com.restaurant_vote.to.HistoryMenuItemTo;
 import com.restaurant_vote.to.HistoryVoteTo;
 import com.restaurant_vote.to.VoteTo;
 import com.restaurant_vote.web.json.JsonUtil;
 import org.junit.Test;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.ResultActions;
 
 
@@ -146,7 +144,7 @@ public class AdminControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(TestUtil.contentJson(getVotesAsList().stream()
+                .andExpect(contentJson(getVotesAsList().stream()
                         .map(VoteTo::new)
                         .collect(Collectors.toList())));
     }
@@ -158,7 +156,7 @@ public class AdminControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(TestUtil.contentJson(getHistoryVotesAsList().stream()
+                .andExpect(contentJson(getHistoryVotesAsList().stream()
                         .map(HistoryVoteTo::new)
                         .collect(Collectors.toList())));
     }
@@ -169,7 +167,7 @@ public class AdminControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(TestUtil.contentJson(Stream.of(HISTORY_VOTE1,HISTORY_VOTE2)
+                .andExpect(contentJson(Stream.of(HISTORY_VOTE1,HISTORY_VOTE2)
                 .map(HistoryVoteTo::new)
                 .collect(Collectors.toList())));
     }
@@ -180,7 +178,7 @@ public class AdminControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(TestUtil.contentJson(Stream.of(HISTORY_VOTE1,HISTORY_VOTE3)
+                .andExpect(contentJson(Stream.of(HISTORY_VOTE1,HISTORY_VOTE3)
                         .map(HistoryVoteTo::new)
                         .collect(Collectors.toList())));
     }
@@ -191,7 +189,7 @@ public class AdminControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(TestUtil.contentJson(new HistoryVoteTo[] {new HistoryVoteTo(HISTORY_VOTE1)}));
+                .andExpect(contentJson(new HistoryVoteTo[] {new HistoryVoteTo(HISTORY_VOTE1)}));
     }
 
 
@@ -208,4 +206,22 @@ public class AdminControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER1)))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    public void testBadCredentials() throws Exception{
+        mockMvc.perform(get(URL)
+                .with(SecurityMockMvcRequestPostProcessors.httpBasic(ADMIN.getEmail(), "wrong_password")))
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+
+    @Test
+    public void testNotFound() throws Exception{
+        mockMvc.perform(get(URL+"/users/by?email=wrong@email.com")
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
 }
