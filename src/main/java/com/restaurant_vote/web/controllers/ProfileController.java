@@ -80,9 +80,4 @@ public class ProfileController {
         return historyVoteService.getByUserAndDate(AuthorizedUser.id(),period.getStart(),period.getEnd());
     }
 
-    @GetMapping("/exception")
-    public void testException()throws Exception{
-        throw new NumberFormatException();
-    }
-
 }

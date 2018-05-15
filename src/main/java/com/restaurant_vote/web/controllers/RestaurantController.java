@@ -26,7 +26,6 @@ import java.util.List;
 @RequestMapping(value = RestaurantController.URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController {
     static final String URL = "/restaurants";
-    private static Logger logger= LoggerFactory.getLogger("Controller");
 
     @Autowired
     private RestaurantService service;
